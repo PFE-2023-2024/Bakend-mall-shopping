@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 const pool = require('../../db')
 
 const UserController = {};
@@ -33,10 +34,15 @@ UserController.get = async (req, res) => {
         if (!isMatch) {
             return res.status(400).json({ success: false, error: 'Invalid email or password' });
         }
-        res.status(200).json({ success: true, user: results.rows[0] });
+        const { userId, firstName, lastName, email, image } = results.rows[0];
+        const payload = {
+            user: { userId, firstName, lastName, email, image }
+        };
+        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 3600 });
+        res.status(200).json({ success: true, token: `Bearer ${token}` });
     } catch(error) {
         console.log('error in userController.get while trying to get user from the database', error.message);
-        res.status(400).json({ success: false, error: error.message });
+        res.status(500).json({ success: false, error: error.message });
     }
 }
 

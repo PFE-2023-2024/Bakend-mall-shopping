@@ -4,16 +4,22 @@ async function createTable() {
     try {
       // Connexion à la base de données
       console.log("Connected to the PostgreSQL database");
-  
+
       // Création de la table utilisateurs
       const createTableutilisateursQuery = `
-        CREATE TABLE IF NOT EXISTS utilisateurs (
-          idUtilisateur SERIAL PRIMARY KEY,
-          nom VARCHAR(50) NOT NULL,
-          prenom VARCHAR(50) NOT NULL,
+        CREATE TABLE IF NOT EXISTS users (
+          userId SERIAL PRIMARY KEY,
+          firstName VARCHAR(50) NOT NULL,
+          lastName VARCHAR(50) NOT NULL,
           email VARCHAR(50) NOT NULL,
-          motDePasse VARCHAR(50) NOT NULL,
-          role VARCHAR(50) NOT NULL DEFAULT 'customer'
+          password VARCHAR(100),
+          role VARCHAR(50) NOT NULL DEFAULT 'customer',
+          image VARCHAR(100) DEFAULT NULL,
+          googleId VARCHAR(100) DEFAULT NULL,
+          facebookId VARCHAR(100) DEFAULT NULL,
+          CONSTRAINT email_unique UNIQUE (email),
+          CONSTRAINT unique_googleId UNIQUE (googleId),
+          CONSTRAINT unique_facebookId UNIQUE (facebookId)
         )
       `;
   

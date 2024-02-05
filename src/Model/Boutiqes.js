@@ -34,7 +34,7 @@ BoutiqueController.create= (req, res) => {
   BoutiqueController.get=async (req, res) => {
     const id = req.params.id; // Récupérer l'ID envoyé via les paramètres de l'URL
     try {
-      const result = await pool.query('SELECT boutiques.*, utilisateurs.nom AS nom_admin ,utilisateurs.prenom AS prenom_admin  FROM boutiques INNER JOIN utilisateurs ON boutiques.admin = utilisateurs.idUtilisateur WHERE admin = $1', [parseInt(id)]);
+      const result = await pool.query('SELECT boutiques.*, users.firstName AS nom_admin ,users.lastName AS prenom_admin  FROM boutiques INNER JOIN users ON boutiques.admin = users.userId WHERE admin = $1', [parseInt(id)]);
     
       res.json(result.rows);
     } catch (error) {
